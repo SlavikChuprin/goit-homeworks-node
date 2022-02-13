@@ -15,16 +15,25 @@ async function listContacts() {
   return await readContent();
 }
 
-function getContactById(contactId) {
-  // ...твой код
+async function getContactById(contactId) {
+  const contacts = await readContent();
+  const [contact] = contacts.filter((c) => c.id === contactId);
+  return contact;
 }
 
 function removeContact(contactId) {
   // ...твой код
 }
 
-function addContact(name, email, phone) {
-  // ...твой код
+async function addContact(name, email, phone) {
+  const contacts = await readContent();
+  const newContact = { id: randomUUID(), name, email, phone };
+  contacts.push(newContact);
+  await fs.writeFile(
+    path.join(__dirname, "contacts.json"),
+    JSON.stringify(contacts, null, 2)
+  );
+  return newContact;
 }
 
 module.exports = { listContacts, getContactById, removeContact, addContact };
