@@ -17,12 +17,18 @@ async function listContacts() {
 
 async function getContactById(contactId) {
   const contacts = await readContent();
-  const [contact] = contacts.filter((c) => c.id === contactId);
+  const contact = contacts.find((c) => c.id === contactId);
   return contact;
 }
 
-function removeContact(contactId) {
-  // ...твой код
+async function removeContact(contactId) {
+  const contacts = await readContent();
+  const newContactsArr = contacts.filter((c) => c.id !== contactId);
+  await fs.writeFile(
+    path.join(__dirname, "contacts.json"),
+    JSON.stringify(newContactsArr, null, 2)
+  );
+  return newContactsArr;
 }
 
 async function addContact(name, email, phone) {
